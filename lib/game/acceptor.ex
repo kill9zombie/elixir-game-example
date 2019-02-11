@@ -63,7 +63,27 @@ defmodule Game.Acceptor do
     Logger.debug fn -> "#{__MODULE__} received data: #{inspect data}" end
 
     case String.trim(data) do
+      "north" ->
+        Player.move(player_name, :north)
+        loop({player_name, socket})
+
+      "south" ->
+        Player.move(player_name, :south)
+        loop({player_name, socket})
+
+      "east" ->
+        Player.move(player_name, :east)
+        loop({player_name, socket})
+
+      "west" ->
+        Player.move(player_name, :west)
+        loop({player_name, socket})
+
       "quit" -> :gen_tcp.send(socket, "goodbye\r\n")
+
+      _ ->
+        :gen_tcp.send(socket, "Invalid command.\r\n\r\n")
+        loop({player_name, socket})
     end
   end
 
